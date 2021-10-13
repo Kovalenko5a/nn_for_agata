@@ -12,6 +12,7 @@ scipy = "*"
 ipykernel = "*"
 tensorflow-probability = "*"
 seaborn = "*"
+pipenv-to-requirements = "*"
 
 [dev-packages]
 
