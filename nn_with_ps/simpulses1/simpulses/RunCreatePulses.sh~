@@ -1,0 +1,28 @@
+#!/bin/bash
+namebase=`pwd`
+for I in `find ./Data/ -iname '[4-9][RGB]' | sort` 
+do
+    crystalname=`echo $I | sed -e 's#./Data/##'`
+    N=${#crystalname}
+    crystaltype=`echo $crystalname | cut -b $N-`
+    crystal=`echo $crystalname | cut -b $(($N-1))`
+    case $crystaltype in
+	R*)
+	    Fieldname=A001
+	    Geomname=AGATARed.list
+	    anisname=anisotropy_complete_a001
+	    ;;
+	G*)
+	    Fieldname=B002
+	    Geomname=AGATAGreen.list
+	    anisname=anisotropy_complete_b002
+	    ;;
+	B*)
+	    Fieldname=C002
+	    Geomname=AGATABlue.list
+	    anisname=anisotropy_complete_c002
+	    ;;
+    esac
+    command="mpirun -x AGATAGeFEM_Writelibfield=yes -x AGATAGeFEM_NumberOfThreads=1 -x AGATAGeFEM_NoADF=yes -np 7 AGATAGeFEM --AGATAsim -F${namebase}/AGATAFields/${Fieldname}/${Fieldname} -A${namebase}/AGATAFields/${Fieldname}/${anisname} -S${namebase}/AGATAFields/${Fieldname}/${Geomname} -I${I}/AGATAGeFEMINPUT_${crystalname}_0000.lmevents -O${I}/Traces_${crystalname} 2>/dev/null"
+    eval $command
+done

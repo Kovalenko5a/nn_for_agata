@@ -1,0 +1,24 @@
+#This is a comment...
+#first a line describing the geometry of the source
+#Point x y z
+#or 
+#Line x1 y1 z1 x2 y2 z2 
+#or 
+#Plane x1 y1 z1 x2 y2 z2 x3 y3 z3
+#or
+#Sphere x y z R1 R2 
+#each branch is separated by a blank line
+#first line of each branch is prob
+#and each decay in each branch is a line
+#
+# Particle tau Energy_dist_type Energy_par A_coeff_in_Ang_Corr
+#
+#Not that for the first particle in each branch the emisson angle
+#is isotropic, and lifetime set to zero (decay time is generated)
+#
+
+Point 0 0 0
+
+1.
+gamma 0     Discrete 1172  1
+gamma 8e-13 Discrete 1333  1 0 0.1020 0 0.0091
