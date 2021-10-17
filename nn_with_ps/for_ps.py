@@ -56,3 +56,21 @@ with open("./simpulses1/simpulses/Data/10B/AGATAGeFEMINPUT_10B_0000.lmevents", "
 buffer2.close()
 df2 = pd.read_csv(r'buff6.csv')
 
+xxx = np.bincount(df2.segm)
+l = 0
+# l =   X     Y    -> X = Alphabet[l/10]  Y = l%10
+#     A...F 0...5
+feature = []
+lable = []
+for i in xxx:
+    if i!=0:
+        X = l//10
+        Y = l%10
+        XY = ['A','B','C','D','E','F'][X] + str(Y)
+        feature.append(np.array(df1[XY]))
+        lable.append(i)
+        l+=1
+    else:
+        l+=1
+    
+

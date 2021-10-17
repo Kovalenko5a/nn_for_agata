@@ -36,6 +36,7 @@ def global_array(number=1000):
         if cool==True and x!="$\n":
             if x[3]!="-":
                 y=x[0:]
+                #regular expression (regex)
                 y=y.replace(" ", ",")
                 y=y.replace(",,", ",")
                 y=y.replace(3*",", ",")
