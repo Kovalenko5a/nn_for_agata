@@ -1047,7 +1047,7 @@ int main(int argc, char** argv)
 
 {
   std::ifstream input(argv[1]);
-  std::ofstream ofs ("test.csv", std::ofstream::out);
+  std::ofstream ofs ("test1.csv", std::ofstream::out);
   AGATAGeFEM::APulseShapeEvent<short> AnPSEvent;
   while(input >> AnPSEvent){
     if(input.good()){
