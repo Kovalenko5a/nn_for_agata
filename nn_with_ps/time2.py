@@ -11,8 +11,11 @@ title2 = "x,y,z,edep,cryst,segm,d,h,m,mus\n"
 
 
 
-def take_a_time_of_a_bit_of_data_from_detector(num_of_bit=1, num="1", BGR="B"):
+def take_a_time_of_a_bit_of_data_from_detector(num_of_bit=1, cryst_num=0):
     ###############################################################################
+    
+    num=str(cryst_num//3+1)
+    BGR=["R","G","B"][cryst_num%3]
     open("buff_time.csv", "w").close()
     buffer2 = open("buff_time.csv", "a")
     buffer2.write(title2)
@@ -42,10 +45,10 @@ def take_a_time_of_a_bit_of_data_from_detector(num_of_bit=1, num="1", BGR="B"):
         time_start = None
 #     val = len(df2)-1
 #     time_finish = ((df2.d[val]*24 + df2.h[val])*60 + df2.m[val])*60*pow(10,6)+df2.mus[val]
-    return time_start
+    return time_start, num_of_bit
 ########################################################        
 ########################################################
-a=[]
+#a=[]
 
 # for iterat in range(1,11):
 #     my_time = take_a_time_of_a_bit_of_data_from_detector(iterat, "1", "B")
@@ -58,23 +61,23 @@ a=[]
 #                 print(my_time-your_time)
 
 
-start = time.time()
-for iterat in range(3,4):
-    my_time = take_a_time_of_a_bit_of_data_from_detector(iterat, "1", "B")
-    for num in number:
-        for BGR in letter:
-            your_time = take_a_time_of_a_bit_of_data_from_detector(1, num, BGR)
-            dif0 = your_time - my_time
-            j=1
-            while (abs(dif0) > 100 or dif0>0) and your_time!=None:
-                j+=1
-                your_time = take_a_time_of_a_bit_of_data_from_detector(j, num, BGR)
-                if your_time!=None:
-                    dif0 = your_time - my_time
-                print(dif0, "  ", j, "  ", num, "  " + BGR)
-            if abs(dif0) < 100:
-                print(True, "  ", dif0, "  ", j, "  ", num , "  ", BGR)
-                a.append([dif0, j,num,BGR])
-            if dif0<0: print(False)
-end = time.time()
-print(end-start)
+# start = time.time()
+# for iterat in range(3,4):
+#     my_time = take_a_time_of_a_bit_of_data_from_detector(iterat, "1", "B")
+#     for num in number:
+#         for BGR in letter:
+#             your_time = take_a_time_of_a_bit_of_data_from_detector(1, num, BGR)
+#             dif0 = your_time - my_time
+#             j=1
+#             while (abs(dif0) > 100 or dif0>0) and your_time!=None:
+#                 j+=1
+#                 your_time = take_a_time_of_a_bit_of_data_from_detector(j, num, BGR)
+#                 if your_time!=None:
+#                     dif0 = your_time - my_time
+#                 print(dif0, "  ", j, "  ", num, "  " + BGR)
+#             if abs(dif0) < 100:
+#                 print(True, "  ", dif0, "  ", j, "  ", num , "  ", BGR)
+#                 a.append([dif0, j,num,BGR])
+#             if dif0<0: print(False)
+# end = time.time()
+# print(end-start)

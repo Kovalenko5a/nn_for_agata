@@ -56,5 +56,19 @@ def relevant_distance(Ncr1, Nseg1, Ncr2, Nseg2):
     
 print(relevant_distance(163, 3, 159, 13))
 #del df
+
+def relevant_distance_and_direction(Ncr1, Nseg1, Ncr2, Nseg2):
+    slice1 = Nseg1//10
+    sector1 = Nseg1%10
+    slice2 = Nseg2//10
+    sector2 = Nseg2%10
+    Num_in_df1 = Ncr1*36+6*slice1+sector1
+    Num_in_df2 = Ncr2*36+6*slice2+sector2
+    r1 = np.array([df.x[Num_in_df1], df.y[Num_in_df1], df.z[Num_in_df1]])
+    r2 = np.array([df.x[Num_in_df2], df.y[Num_in_df2], df.z[Num_in_df2]])
+    R = r1 - r2
+    absR = math.sqrt(R.dot(R))
+    normR = R/absR
+    return absR, normR
             
             

@@ -72,5 +72,15 @@ for i in xxx:
         l+=1
     else:
         l+=1
+
+from matplotlib import pyplot as plt         
+for j in ['A','B','C','D','E','F']:
+    for i in range(6):     
+        plt.plot(df1["time"], df1[j+str(i)])
+        plt.xlabel('Time, [s]')
+        ##arbitary or anknown unist
+        plt.ylabel('Amplitude, [a.u.]')
+        plt.title(j+str(i))
+        plt.show()
     
 

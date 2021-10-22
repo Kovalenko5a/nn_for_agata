@@ -3,6 +3,7 @@
 
 import numpy as np
 import math
+import time
 import tensorflow as tf
 import tensorflow.compat.v2 as tf
 tf.enable_v2_behavior()
@@ -201,14 +202,17 @@ accuracy = categorical_accuracy
 results_acc = [] # print out the result in last column
 results_loss=[]
 
+##timing
+my_start_time = time.time()
+print(my_start_time)
 ##custom training loop without testing and evaluating
 
-for i in range(epochs):
+for i in range(90):
     feature, lable = loader_main.__next__()
     print("\n")
     y = model(feature, training=True)
-    for k in range(len(lable)):
-        print(lable[k],"      ", y[k])
+#     for k in range(len(lable)):
+#         #print(lable[k],"      ", y[k])
     with tf.GradientTape() as tape:
         predictions = model(feature, training=True)
         loss = loss_fn(lable, predictions) + sum(model.losses)
@@ -218,18 +222,23 @@ for i in range(epochs):
     acc = tf.reduce_mean(accuracy(lable, predictions))
     results_acc.append(acc)
     results_loss.append(loss)
+    print("#############")
     print("ACCURACY:")
     print(float(acc))
-    print("\n")
     print("LOSS:")
     print(float(loss))
+    print("#############")
+
+my_end_time = time.time()
+print(my_end_time)
+my_time = my_end_time - my_start_time
+print(my_time)    
 
 #plot accuracy curve
 from matplotlib import pyplot as plt
 epoch_nums = range(1,epochs+1)
 ra = np.array(results_acc, dtype=float)
 rl = np.array(results_loss, dtype=float)
-
 plt.plot(epoch_nums, ra)
 plt.legend('accuracy', loc='upper right')
 plt.xlabel('epoch')
