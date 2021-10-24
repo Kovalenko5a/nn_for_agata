@@ -70,7 +70,7 @@ def mask_for_ps(num_of_ps=1000):
             my_time_bit = take_a_time_of_a_bit_of_data_from_detector(j,A[k][0])
         #print(my_time_bit[0],'  ==  ',A[k][3])
         if(k%1000==0): print(k//1000)
-        save_what_ps_to_search.append([my_time_bit[1], A[k][0], A[k][1], A[k][2]])
+        save_what_ps_to_search.append([my_time_bit[1], A[k][0], A[k][1], A[k][2], my_time_bit[0]])
     A.clear()
 
     return save_what_ps_to_search
