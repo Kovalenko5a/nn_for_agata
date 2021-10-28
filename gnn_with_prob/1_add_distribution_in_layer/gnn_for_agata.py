@@ -1,5 +1,6 @@
 import numpy as np
 import math
+import json
 import tensorflow as tf
 import tensorflow.compat.v2 as tf
 tf.enable_v2_behavior()
@@ -34,11 +35,23 @@ learning_rate = 0.001  # Learning rate
 epochs = 4  # Number of training epochs
 es_patience = 30  # Patience for early stopping
 batch_size = 500  # Batch size
-number_of_graphs = 10000 #How many graphs use to train
+#number_of_graphs = 10000 #How many graphs use to train
+
 
 #read data from file (see for_gnn_with_tfp.py)
-X, Y, A = global_array(number_of_graphs)
+#uncoment if want to use algorythm from 0
+# X, Y, A = global_array(number_of_graphs)
 
+#read data from file (see create_the_json_datafiles.py) and .json file
+
+# JSON file
+json_file = open('data_global_1.json', "r")
+ 
+# Reading from file
+json_data = json.loads(json_file.read())
+X, Y, A = json_data["Graphs"]["X"], json_data["Graphs"]["Y"], json_data["Graphs"]["A"]
+
+number_of_graphs = len(X) #How many graphs in file
 
 ###how number of interaction distributed:
 # yy = []

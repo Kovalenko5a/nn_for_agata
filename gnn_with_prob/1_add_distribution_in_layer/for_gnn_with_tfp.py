@@ -59,7 +59,7 @@ def global_array(number=1000):
                     print(num_of_training_units)
                 X.append(xf)
                 Y.append(yl)
-                A.append(a)
+                A.append(a.tolist())
                 buffer.close()
                 b=True
                 del buff_df

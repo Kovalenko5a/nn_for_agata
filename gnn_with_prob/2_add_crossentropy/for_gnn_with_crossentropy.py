@@ -72,10 +72,10 @@ def global_array(number=1000):
                 for numbers_of_inter in yl:
                     crossentr = np.zeros(9+1)
                     crossentr[numbers_of_inter]=1
-                    y_crossentr.append(crossentr[1:])
+                    y_crossentr.append(crossentr[1:].tolist())
                 X.append(xf)
                 Y.append(y_crossentr)
-                A.append(a)
+                A.append(a.tolist())
                 buffer.close()
                 b=True
                 del buff_df

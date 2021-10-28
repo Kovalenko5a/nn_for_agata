@@ -3,6 +3,7 @@
 
 import numpy as np
 import math
+import json
 import time
 import tensorflow as tf
 import tensorflow.compat.v2 as tf
@@ -27,7 +28,7 @@ from spektral.layers.pooling import TopKPool
 from spektral.transforms.normalize_adj import NormalizeAdj
 from spektral.transforms import GCNFilter
 
-from /3_add_directive_vector_in_graph/for_gnn_with_direction import global_array
+from for_gnn_with_crossentropy import global_array
 
 import seaborn as sbn
 
@@ -38,11 +39,22 @@ learning_rate = 0.001  # Learning rate
 epochs = 20  # Number of training epochs
 es_patience = 30  # Patience for early stopping
 batch_size = 500  # Batch size
-number_of_graphs = 10000 #How many graphs use to train
+#number_of_graphs = 10000 #How many graphs use to train
 
 #read data from file (see for_gnn_with_tfp.py)
-X, Y, A, E = global_array(number_of_graphs)
+#uncoment if want to use algorythm from 0
+# X, Y, A = global_array(number_of_graphs)
 
+#read data from file (see create_the_json_datafiles.py) and .json file
+
+# JSON file
+json_file = open('data_global_2.json', "r")
+ 
+# Reading from file
+json_data = json.loads(json_file.read())
+X, Y, A = json_data["Graphs"]["X"], json_data["Graphs"]["Y"], json_data["Graphs"]["A"]
+
+number_of_graphs = len(X) #How many graphs in file
 
 ################################################################################
 # Load data
@@ -55,12 +67,10 @@ class MyDataset(Dataset):
     def read(self):
         def make_graph(j):
             a = sp.csr_matrix(A[j])
-            e = sp.csr_matrix(E[j])
             #y = sp.csr_matrix(Y[j])
-            return Graph(x=np.array(X[j], dtype = 'float64'), 
-                         a=a, 
-                         e=e,
-                         y = np.array(Y[j], dtype = 'int64')
+            return Graph(x=np.array(X[j], dtype = 'float64'), a=a, 
+                        # y=y
+                        y = np.array(Y[j], dtype = 'int64')
                         )
 
         # We must return a list of Graph objects
@@ -209,7 +219,7 @@ my_start_time = time.time()
 print(my_start_time)
 ##custom training loop without testing and evaluating
 
-for i in range(90):
+for i in range(epochs):
     feature, lable = loader_main.__next__()
     print("\n")
     y = model(feature, training=True)

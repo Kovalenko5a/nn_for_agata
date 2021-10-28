@@ -1,0 +1,32 @@
+#/Agata/detector/solidFile ../Symm/Symmsolid.list
+#/Agata/detector/angleFile ../Symm/Symmeuler.list
+#/Agata/detector/clustFile ../Symm/Symmclust.list
+#/Agata/detector/wallsFile ../Symm/Symmwalls.list
+#/Agata/detector/sliceFile ../Symm/Symmslice.list
+##############################
+#/Agata/detector/solidFile ../A180/A180solid.list
+#/Agata/detector/angleFile ../A180/A180euler3clusters.list
+#/Agata/detector/wallsFile ../A180/A180walls.list
+#/Agata/detector/clustFile ../A180/A180clust.list
+#/Agata/detector/sliceFile ../A180/A180slice.list
+#############################
+/Agata/detector/solidFile ../A180-orig/A180solid.list
+/Agata/detector/angleFile ../A180-orig/A180euler3D.list
+/Agata/detector/wallsFile ../A180-orig/A180walls.list
+/Agata/detector/clustFile ../A180-orig/A180clust.list
+/Agata/detector/sliceFile ../A180-orig/A180slice.list
+
+/Agata/detector/enableCapsules
+/Agata/detector/update
+
+/control/execute visVRML.mac
+
+
+/Agata/file/verbose 2
+/Agata/file/enableLM
+/Agata/file/enableGammaLM
+/Agata/file/info/outputMask 11100110
+#/Agata/generator/gamma/band 80. 400. 5
+/Agata/generator/gamma/energy 1332.5
+#Co60 -> Ni60
+/Agata/run/beamOn 100000

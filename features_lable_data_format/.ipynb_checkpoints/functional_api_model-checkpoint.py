@@ -8,15 +8,20 @@ import pandas as pd
 target_variable = "num_of_int"
 #feature_variable = ["edep", "crystal", "slice_sect"]
 hiden_layer_size = 167
+
+#Train to test datasize ratio
 train_test_split=0.7
+
+
 #read data
 # 2 1d arrays which containe energy deposition in X row (feachure) and number of interaction in Y row (lable)
 
 
-# data = pd.read_csv("/home/yantuzemec/data_anal/geant4_data_anal/For_nn_final.csv")
+
 data = pd.read_csv("out.csv")
 data.slice_sect = data.slice_sect/55.
 data.crystal = data.crystal/163.
+
 #shaffle the dataset:
 data = data.reindex(np.random.permutation(data.index))
 

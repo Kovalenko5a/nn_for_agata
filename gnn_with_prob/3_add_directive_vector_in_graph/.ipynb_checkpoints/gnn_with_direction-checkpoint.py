@@ -3,6 +3,7 @@
 
 import numpy as np
 import math
+import json
 import time
 import tensorflow as tf
 import tensorflow.compat.v2 as tf
@@ -38,11 +39,22 @@ learning_rate = 0.0001  # Learning rate
 epochs = 200  # Number of training epochs
 es_patience = 30  # Patience for early stopping
 batch_size = 500  # Batch size
-number_of_graphs = 20000 #How many graphs use to train
+#number_of_graphs = 20000 #How many graphs use to train
 
 #read data from file (see for_gnn_with_tfp.py)
-X, Y, A, E = global_array(number_of_graphs)
+#uncoment if want to use algorythm from 0
+# X, Y, A, E = global_array(number_of_graphs)
 
+#read data from file (see create_the_json_datafiles.py) and .json file
+
+# JSON file
+json_file = open('data_global_3.json', "r")
+ 
+# Reading from file
+json_data = json.loads(json_file.read())
+X, Y, A, E = json_data["Graphs"]["X"], json_data["Graphs"]["Y"], json_data["Graphs"]["A"], json_data["Graphs"]["E"]
+
+number_of_graphs = len(X) #How many graphs in file
 
 ################################################################################
 # Load data
@@ -69,7 +81,11 @@ class MyDataset(Dataset):
 data = MyDataset(number_of_graphs, 
 #                  transforms=NormalizeAdj()
                 )
-
+#clear RAM
+X.clear()
+Y.clear()
+A.clear()
+E.clear()
 
 #data for train and test (in program used only whole dataset for training)
 data_tr = data[0:int(len(data)*0.6)]
@@ -166,9 +182,9 @@ class Net(Model):
         
         #################################
         #x1 = self.conv1([x, a])
-        #x1 = self.conv2([x, a, e])
+        x1 = self.conv2([x, a, e])
         #x1, e1 = self.conv3([x, a, e])
-        x1 = self.conv3([x, a, e])
+#         x1 = self.conv3([x, a, e])
         #x, i = self.global_pool([x, i])
         #x1, a1, i1 = self.pool1([x, a, i])
         x1 = self.dense1(x1)
@@ -258,3 +274,6 @@ plt.legend('loss', loc='upper right')
 plt.xlabel('epoch')
 plt.ylabel('loss')
 plt.show()
+
+#clear RAM
+del data_tr, data_va, data_te, loader_main, loader_te, loader_tr, loader_va
