@@ -28,7 +28,7 @@ from spektral.layers.pooling import TopKPool
 from spektral.transforms.normalize_adj import NormalizeAdj
 from spektral.transforms import GCNFilter
 
-from for_gnn_with_direction import global_array
+#from for_gnn_with_direction import global_array
 
 import seaborn as sbn
 

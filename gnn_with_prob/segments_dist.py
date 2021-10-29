@@ -14,7 +14,6 @@ name_end = "ENDPOSITION_SEGMENTS\n"
 # buffer = open("buff2.csv", "a")
 # buffer.write("cr,slice,sect,x,y,z,vol\n")
 # i=0
-# with open("/home/yantuzemec/Documents/knu/summer/geant4_france/agata/branches/GANIL/trunk/build/GammaEvents.0000", "r") as f1:
 # with open("GammaEvents.0000", "r") as f1:
 #     for x in f1:
 #         i+=1

@@ -19,7 +19,7 @@ b=True
 num_of_training_units=0;
 length_of_df=0;
 x = f1.readline()
-while num_of_training_units<1000:  
+while num_of_training_units<100000:  
     if(len(x)>15 and x[3]!="-" and x[0]==' '): 
         y=x[0:]
         y=y.replace(" ", ",")

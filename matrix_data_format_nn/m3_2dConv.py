@@ -26,7 +26,9 @@ lable_shape = lable_array.shape
 def create_model(learning_rate):
     input1 = kr.layers.Input(shape=(feature_shape[1],feature_shape[2],))
 #     input1 = kr.layers.Input(input_shape=feature_shape)
-    x1 = kr.layers.MaxPooling1D(2)(input1)
+    x1 = kr.layers.Conv1D(80, 3)(input1)
+#     input1 = kr.layers.Conv1D(80, 3, input_shape=(input_shape1[1],1,))
+    x1 = kr.layers.MaxPooling1D(2)(x1)
     x1 = kr.layers.Dense(60, activation="sigmoid")(x1)
     x1 = kr.layers.Permute((2,1))(x1)
     x1 = kr.layers.MaxPooling1D(2)(input1)

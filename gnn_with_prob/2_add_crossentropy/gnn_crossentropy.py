@@ -28,7 +28,7 @@ from spektral.layers.pooling import TopKPool
 from spektral.transforms.normalize_adj import NormalizeAdj
 from spektral.transforms import GCNFilter
 
-from for_gnn_with_crossentropy import global_array
+#from for_gnn_with_crossentropy import global_array
 
 import seaborn as sbn
 
@@ -262,3 +262,6 @@ plt.legend('loss', loc='upper right')
 plt.xlabel('epoch')
 plt.ylabel('loss')
 plt.show()
+
+#clear RAM
+del data_tr, data_va, data_te, loader_main, loader_te, loader_tr, loader_va

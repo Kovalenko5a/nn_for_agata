@@ -24,7 +24,7 @@ from spektral.layers.pooling import TopKPool
 from spektral.transforms.normalize_adj import NormalizeAdj
 from spektral.transforms import GCNFilter
 
-from for_gnn_with_tfp import global_array
+#from for_gnn_with_tfp import global_array
 
 import seaborn as sbn
 
@@ -68,7 +68,7 @@ yy = []
 for i in Y:
     for j in i:
         yy.append(j)
-xxx = np.array(range(10))
+xxx = np.array(range(8))
 counts = np.bincount(yy)
 popt, _ = curve_fit(expon, xxx[1:], counts[1:]/counts.sum())
 XX = np.array([0000.1*i for i in range(91)])
@@ -111,6 +111,10 @@ loader_va = DisjointLoader(data_va, node_level=True, batch_size=batch_size)
 loader_te = DisjointLoader(data_te, node_level=True, batch_size=batch_size)
 loader_main = DisjointLoader(data, node_level=True, batch_size=batch_size)
 
+
+################################################################################
+# Model
+################################################################################
 ##Create the layer with random weights
 # Define the prior weight distribution as Normal of mean=0 and stddev=1.
 # Note that, in this example, the we prior distribution is not trainable,
@@ -216,7 +220,10 @@ class Net(Model):
         output = np.around(x1, 3)
         return output
 
-    
+
+################################################################################
+# Training
+################################################################################    
 ##creat the model object
 model = Net()
 ##Optimizer for back propagation
@@ -238,7 +245,7 @@ for i in range(epochs):
     print("\n")
     y = model(feature, training=True)
     for k in range(len(lable)):
-        print(int(lable[k]), "   ", int(a1.sample(sample_shape=([1]))) ,   "           ", float(y[k]))
+        print("Target: ", int(lable[k]), "   Random:", int(a1.sample(sample_shape=([1]))) ,   "   Model out", float(y[k]))
     with tf.GradientTape() as tape:
         predictions = model(feature, training=True)
         loss = loss_fn(lable, predictions) + sum(model.losses)
@@ -251,3 +258,6 @@ for i in range(epochs):
     print("\n")
     print("LOSS:")
     print(float(loss))
+    
+#clear RAM
+del data_tr, data_va, data_te, loader_main, loader_te, loader_tr, loader_va

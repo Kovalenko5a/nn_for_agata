@@ -31,21 +31,14 @@ train_data=data[mask]
 test_data=data[~mask]
 
 tr_features1 = np.array(train_data.drop(["crystal", "slice_sect"], axis=1))
-#tr_features1 = np.expand_dims(tr_features1, axis=0)
 tr_features2 = np.array(train_data[["crystal", "slice_sect"]])
-#tr_features2 = np.expand_dims(tr_features2, axis=0)
 tr_labels = np.array(train_data[[target_variable]])
-#tr_labels = np.expand_dims(tr_labels, axis=1)
-# tr_labels = np.expand_dims(tr_labels, axis=0)
-# tr_labels = np.expand_dims(tr_labels, axis=0)
+
 
 te_features1 = np.array(test_data.drop(["crystal", "slice_sect"], axis=1))
-# te_features1 = np.expand_dims(te_features1, axis=0)
 te_features2 = np.array(test_data[["crystal", "slice_sect"]])
 te_labels = np.array(test_data[[target_variable]])
-# te_labels = np.expand_dims(te_labels, axis=1)
-# te_labels = np.expand_dims(te_labels, axis=0)
-# te_labels = np.expand_dims(te_labels, axis=0)
+
 
 
 input_shape1=tr_features1.shape
@@ -56,8 +49,8 @@ input_shape2=tr_features2.shape
 def create_model(learning_rate):
     input1 = kr.layers.Input(shape=(input_shape1[1],), name="one-hot")
     #x1 = kr.layers.Conv1D(80, 3)(input1)
-#     input1 = kr.layers.Conv1D(80, 3, input_shape=(input_shape1[1],1,))
-   # x1 = kr.layers.Dense(60, activation="sigmoid")(x1)
+    #input1 = kr.layers.Conv1D(80, 3, input_shape=(input_shape1[1],1,))
+    #x1 = kr.layers.Dense(60, activation="sigmoid")(x1)
     #x1 = kr.layers.Conv1D(30, 2)(x1)
     x1 = kr.layers.Dense(80)(input1)
     x1 = kr.layers.Dense(60)(x1)
@@ -86,14 +79,15 @@ def train_model(model, epochs, batch_size, feature, lable):
     # Isolate the mean absolute error for each epoch.
     hist = pd.DataFrame(history.history)
     rmse = hist["accuracy"]
+    rmse2 = hist["loss"]
 
-    return epochs, rmse
+    return epochs, rmse, rmse2
 
-def plot_the_loss_curve(epochs, rmse):
+def plot_the_loss_curve(epochs, rmse, name):
     """Plot a curve of loss vs. epoch."""
     plt.figure()
     plt.xlabel("Epoch")
-    plt.ylabel("accuracy")
+    plt.ylabel(name)
 
     plt.plot(epochs, rmse, label="'||'")
     plt.legend()
@@ -102,17 +96,19 @@ def plot_the_loss_curve(epochs, rmse):
 
 #hyperparameters
 learning_rate=0.05
-epochs=10
-batch_size=2
+epochs=60
+batch_size=300
 
 # Create and compile the model's topography.
 my_model = create_model(learning_rate)
 
 #train model
-epochs, rmse = train_model(my_model, epochs, batch_size, {"one-hot": tr_features1, "edep-crys": tr_features2}, tr_labels)
+epochs, rmse, rmse2 = train_model(my_model, epochs, batch_size, {"one-hot": tr_features1, "edep-crys": tr_features2}, tr_labels)
 
+#ploting the accuracy curve
+plot_the_loss_curve(epochs, rmse, "accuracy")
 #ploting the loss curve
-plot_the_loss_curve(epochs, rmse)
+plot_the_loss_curve(epochs, rmse2, "loss")
 
 #accuracy
 
