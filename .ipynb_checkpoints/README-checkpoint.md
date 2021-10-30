@@ -20,7 +20,7 @@ For simulation we used the most recent branch of GEANT4 model - GANIL's branch. 
 
 2. Secondary approach.
 
-    Is about use information about all charge-carriers which borned during interactions to build pulse-shapes (ps) and use instead of deposed energy - the whole ps. Data processing in [nn_with_ps](nn_with_ps) directory (more details later).
+    Using of information about all charge-carriers which borned during interactions to build pulse-shapes (ps) and use instead of deposed energy - the whole ps. Data processing in [nn_with_ps](nn_with_ps) directory (more details later).
 
 
 # Project details
@@ -78,6 +78,8 @@ All codes for this model presence at [matrix_data_format_nn](matrix_data_format_
 Main idea was to use the matrix \(crystal*segment\) with deposed energy in each cell. Of cause for we need separate matrix for each time-range. As target data we use matrix with the same shape but filled with numbers of interactions in each cell.
 
 Illustration to matrix data format:
+
+
 ![Illustration to matrix data format](frame_matrix.png)
 <!-- <img src="frame_matrix.png"
      alt="Markdown Monster icon"
@@ -138,5 +140,21 @@ In case of input data only one probability should be equal to 1, others - 0 and 
 #### Third
 
 Previous two model both used the same [convolution layers](https://graphneural.network/layers/convolution/#generalconv) whose input data is feature fector and adjacencymatrix as input. In third model we added edges matrix - extra information about connections beatween nodes, and therefore we use another [convolution layers](https://graphneural.network/layers/convolution/#crystalconv). It is the essential difference of third model. Of course [json_creator](gnn_with_prob/3_add_directive_vector_in_graph/json_creator_3.py) also changed to give [output file](gnn_with_prob/3_add_directive_vector_in_graph/data_global_3.json) with edges matrix (E).
+
+### Result
+...
+
+## Pulse shapes as member of input data (secondary approach)
+
+In directory [nn_with_ps](nn_with_ps) you can find set of codes which was created to extract batches of pulse shapes which occured at the same time range. Also with respect to every signals it counts number of interactions. Resulting data you can find in [json file](nn_with_ps/data.json).
+
+
+
+How it works:
+1. By the [path](nn_with_ps/simpulses1/simpulses/Data) we have data files for each crystal about charge-carriers in different segments. All the information in file splited by time ranges. With this information we can create the pulse shape. 
+    Speciall for those files was created [code](nn_with_ps/take_time_of_bit.py) to find what bit of data correspond to knowne time.
+2. From [Only_gamma_events.0000](nn_with_ps/simpulses1/simpulses/OnlyGammaEvents.0000) we can count number of interactions correspond to crystal, segment and time range. With this information and previouse point it is possible to [build the mask](nn_with_ps/read_only_gamma.py): \[bit, crystal, segment, number of interactions].
+3. With mask we know in which crystal interaction occurred so we can use [special code](nn_with_ps/simpulses1/eventstoascii.cpp) (not mine) which product the pulse shapes. Than knowing the number of data bit and the segment we can extract proper to number of interactions the [pulse shape](nn_with_ps/cut_ps_by_num.py) and [build the dataset](nn_with_ps/build_the_dataset.py).
+4. [To create the json file](nn_with_ps/create_json.py) with graphs the time of interaction was added to dataset. So in loop we can find out which interactions occurred at the same time range and merge thay in one graph.
 
 

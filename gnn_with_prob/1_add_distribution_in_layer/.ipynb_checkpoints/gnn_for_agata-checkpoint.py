@@ -32,7 +32,7 @@ import seaborn as sbn
 # Config
 ################################################################################
 learning_rate = 0.001  # Learning rate
-epochs = 4  # Number of training epochs
+epochs = 400  # Number of training epochs
 es_patience = 30  # Patience for early stopping
 batch_size = 500  # Batch size
 #number_of_graphs = 10000 #How many graphs use to train
@@ -72,8 +72,8 @@ xxx = np.array(range(8))
 counts = np.bincount(yy)
 popt, _ = curve_fit(expon, xxx[1:], counts[1:]/counts.sum())
 XX = np.array([0000.1*i for i in range(91)])
-plt.plot(XX, expon(XX, *popt), color='green')
-plt.plot(xxx[1:], counts[1:]/counts.sum(), "*")
+# plt.plot(XX, expon(XX, *popt), color='green')
+# plt.plot(xxx[1:], counts[1:]/counts.sum(), "*")
 
 ##Just tensor of output datashape filled with integer numbers from discrete distribution above
 a1 = tfp.distributions.FiniteDiscrete(xxx[1:], probs=counts[1:]/counts.sum())
@@ -235,8 +235,8 @@ loss_fn = MeanSquaredError()
 
 ##To see the succes of model:
 accuracy = Accuracy()    
-results = [] # print out the result in last column
-
+results_acc = [] # print out the result in last column
+results_loss = []
 
 ##custom training loop without testing and evaluating
 
@@ -244,20 +244,39 @@ for i in range(epochs):
     feature, lable = loader_main.__next__()
     print("\n")
     y = model(feature, training=True)
-    for k in range(len(lable)):
-        print("Target: ", int(lable[k]), "   Random:", int(a1.sample(sample_shape=([1]))) ,   "   Model out", float(y[k]))
+#     for k in range(len(lable)):
+#         print("Target: ", int(lable[k]), "   Random:", int(a1.sample(sample_shape=([1]))) ,   "   Model out", float(y[k]))
     with tf.GradientTape() as tape:
         predictions = model(feature, training=True)
         loss = loss_fn(lable, predictions) + sum(model.losses)
-    gradients = tape.gradient(loss, model.trainable_variables, )
+    gradients = tape.gradient(loss, model.trainable_variables, unconnected_gradients=tf.UnconnectedGradients.ZERO)
+    # unconnected_gradients delete the warning
     optimizer.apply_gradients(zip(gradients, model.trainable_variables))
     acc = tf.reduce_mean(accuracy(lable, predictions))
-    results.append((loss, acc))
+    results_acc.append(acc)
+    results_loss.append(loss)
     print("ACCURACY:")
     print(float(acc))
     print("\n")
     print("LOSS:")
     print(float(loss))
-    
+
+#plot accuracy curve
+from matplotlib import pyplot as plt
+epoch_nums = range(1,epochs+1)
+ra = np.array(results_acc, dtype=float)
+rl = np.array(results_loss, dtype=float)
+plt.plot(epoch_nums, ra)
+plt.legend('accuracy', loc='upper right')
+plt.xlabel('epoch')
+plt.ylabel('accuracy')
+plt.show()
+
+plt.plot(epoch_nums, rl)
+plt.legend('loss', loc='upper right')
+plt.xlabel('epoch')
+plt.ylabel('loss')
+plt.show()    
+
 #clear RAM
 del data_tr, data_va, data_te, loader_main, loader_te, loader_tr, loader_va
