@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-def global_array():
+def global_array(number_of_grids=1000):
     f1=open("10000.0000", "r")
     open("buff.csv", "w").close()
     buffer = open("buff.csv", "a")
@@ -14,9 +14,9 @@ def global_array():
     b=True
     num_of_training_units=0;
     length_of_df=0;
-    Global_array = np.zeros((2, 1000, 165, 56))
+    Global_array = np.zeros((2, number_of_grids, 165, 56))
     x = f1.readline()
-    while num_of_training_units<1000:  
+    while num_of_training_units<number_of_grids:  
         if(len(x)>15 and x[3]!="-" and x[0]==' '): 
             y=x[0:]
             y=y.replace(" ", ",")
@@ -38,7 +38,8 @@ def global_array():
             Global_array[0][num_of_training_units] = feature_array
             Global_array[1][num_of_training_units] = lable_array
             num_of_training_units+=1
-            print(num_of_training_units)
+            if num_of_training_units%100 == 0:
+                print(num_of_training_units)
             buffer.close()
             b=True
             del buff_df
@@ -47,7 +48,7 @@ def global_array():
             buffer.write(title)
         x = f1.readline()
     main.close()
-    return Global_array
+    return Global_array[0], Global_array[1]
         
         
         

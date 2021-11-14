@@ -1,19 +1,35 @@
-# Introduction
+# Introduction <a name="intro"></a>
 
 Welcome to project!
 
-<!-- ## Table of contents
-1. [Task](#task) -->
+## Table of contents
+
+1. [Introduction](#intro)  
+    1.1 [Task](#task)  
+    1.2 [GEANT4 simulation of AGATA](#GA)  
+    1.3 [Available input data from GEANT4 simulation](#data)  
+2. [Project details](#pd)  
+    2.1 [First model](#fm)  
+    2.2 [Second model](#sm)  
+    2.3 [Third model](#tm)  
+    2.4 [Pulse shapes as member of input data (secondary approach)](#ps)
+<!--         2.3.1 [Let's begin from main directory of third model](#content)  
+        2.3.2 [Content of secondary directories](#content2)  
+            2.3.2.1 [First](#first)  
+            2.3.2.2 [Second](#second)  
+            2.3.2.3 [Third](#third)  
+        2.3.3 [Result](#result)   -->
+   
 
 ## Task <a name="task"></a>
 Find method to calculate number of interactions at each segment of each detector of [AGATA](https://www.sciencedirect.com/science/article/pii/S0168900211021516?via%3Dihub), to clarify the pulse-shape analysis (PSA). In this project we use the [Machine learning](https://en.wikipedia.org/wiki/Machine_learning).
 
-## GEANT4 simulation of AGATA 
+## GEANT4 simulation of AGATA <a name="GA"></a>
 For simulation we used the most recent branch of GEANT4 model - GANIL's branch. As an example you can find macro files which we used to simulate some data [my_macro_file](my_macro.mac).
 
 
 
-## Available input data from GEANT4 simulation
+## Available input data from GEANT4 simulation <a name="data"></a>
 1. Main approach <a name="main"></a>.
 
    We can receive the deposed energy, time and position of $\gamma$-ray interactions with Germanium (not considering the type of interaction). All interactions sorted in batches within the same time range (100 $\mu s$). You can find example of raw dataset in [OnlyGammaEvents.0000](gnn_with_prob/OnlyGammaEvents.0000). Form file like above we extract just iformation we need without any changes.
@@ -23,13 +39,13 @@ For simulation we used the most recent branch of GEANT4 model - GANIL's branch. 
     Using of information about all charge-carriers which borned during interactions to build pulse-shapes (ps) and use instead of deposed energy - the whole ps. Data processing in [nn_with_ps](nn_with_ps) directory (more details later).
 
 
-# Project details
+# Project details <a name="pd"></a>
 
 Creation of Neural Network occured like series of experiments with gradual increasing of "complexity". Some of experiment step left out of project and here you can find only the code which I thought were necessary.
 
 I want to notice that my code might to look a little unprofessional: that's not ok in general but ok for me (just sorry for that).
 
-## First model
+## First model <a name="fm"></a>
 All codes of this model you can find in [features_lable_data_format](features_lable_data_format) directory.
 Analytical model might be presented as:  
 <!-- $[{Edep, Crystal, Segment} \rangle \overset{f}\longrightarrow Num\_of\_interaction$   -->
@@ -71,7 +87,7 @@ And test-value of accuracy around 67% - it is an evidence that model all the tim
 
 ---
 
-## Second model
+## Second model <a name="sm"></a>
 
 All codes for this model presence at [matrix_data_format_nn](matrix_data_format_nn) directory. This model is also about [main aproach](#main) in data format.
 
@@ -95,7 +111,7 @@ Input data matrices generated when you run the main code so it may take a while.
 **...Loss and accuracy function will show later**
 
 
-## Third model
+## Third model <a name="tm"></a>
 
 So the third model in which I'm puting the best hope. The main characteristic of this model is so called [Graphs Neural Network](https://graphneural.network/). Here we can manually connect different interactions which occurred at the same time range with some extra information like distance between segments where we have deposet energy.  
 For example, in case of three nodes (segments with signal), graph will be look like that:
@@ -108,7 +124,7 @@ As well as previouse it's also the latest models and thay also contain branching
 2. Same as previous but with discrete distribution of number of interactions instead of exact meaning. Here as loss funciton we use so called [Categorical Crossentropy](https://www.tensorflow.org/api_docs/python/tf/keras/losses/CategoricalCrossentropy). See the [second directory](gnn_with_prob/2_add_crossentropy) with main code.
 3. Same as the second but with extra information about connections - not only the distances but also the direction from one segment to the other. The last one - [third directory](gnn_with_prob/3_add_directive_vector_in_graph) where you can find relevant codes.
 
-### Let's begin from main directory of third model
+### Let's begin from main directory of third model <a name="content"></a>
 
 [Here](gnn_with_prob) you can find [GammaEvents.0000](gnn_with_prob/GammaEvents.0000) generated on AGATA simulation. This file contain information about relative position of segments in each detector and about relative position of detectors in the AGATA. In [code](gnn_with_prob/segments_dist.py) was exatracted this information and saved in [csv file](gnn_with_prob/buff2.csv) and also added function to calculate distanses and directions.
 
@@ -118,9 +134,9 @@ Also you can see the [test code](gnn_with_prob/experements_distrib.py) to explor
 
 Ready to work data sets can be received from [raw data](gnn_with_prob/OnlyGammaEvents.0000) by applying the "json_creator" codes in secodary directories.
 
-### Content of secondary directories
+### Content of secondary directories <a name="content2"></a>
 
-#### First
+#### First <a name="first"></a>
 The [main code](gnn_with_prob/1_add_distribution_in_layer/gnn_for_agata.py) for calculation can recive the input data with help of json-read-method for data_gloval_1.json or as output of function defined in [code for raw data processing](gnn_with_prob/1_add_distribution_in_layer/for_gnn_with_tfp.py) (second variant may take a while).
 
 Remarkable characteristics of main code:
@@ -131,20 +147,20 @@ Remarkable characteristics of main code:
 
  
 
-#### Second
+#### Second <a name="second"></a>
 
 Conceptually the same as previous but with one significant difference. Here we use as loss function so called [CategoricalCrossentropy](https://www.tensorflow.org/api_docs/python/tf/keras/losses/CategoricalCrossentropy). For that purpose our [json_creator_2](gnn_with_prob/2_add_crossentropy/json_creator_2.py) did the target data of [data_global_2](gnn_with_prob/2_add_crossentropy/data_global_2.json) in the form of set of probabilities for numbers of interactions insted of scalar meaning:  
 <img src="https://render.githubusercontent.com/render/math?math=\vec{Y}=[P_{1},P_{2},...,P_{8}]">  
 In case of input data only one probability should be equal to 1, others - 0 and for computed output data is more distributed content.
 
-#### Third
+#### Third <a name="third"></a>
 
-Previous two model both used the same [convolution layers](https://graphneural.network/layers/convolution/#generalconv) whose input data is feature fector and adjacencymatrix as input. In third model we added edges matrix - extra information about connections beatween nodes, and therefore we use another [convolution layers](https://graphneural.network/layers/convolution/#crystalconv). It is the essential difference of third model. Of course [json_creator](gnn_with_prob/3_add_directive_vector_in_graph/json_creator_3.py) also changed to give [output file](gnn_with_prob/3_add_directive_vector_in_graph/data_global_3.json) with edges matrix (E).
+Previous two model both used the same [convolution layers](https://graphneural.network/layers/convolution/#generalconv) whose input data is feature fector and adjacency matrix as input. In third model we added edges matrix - extra information about connections beatween nodes, and therefore we use another [convolution layers](https://graphneural.network/layers/convolution/#crystalconv). It is the essential difference of third model. Of course [json_creator](gnn_with_prob/3_add_directive_vector_in_graph/json_creator_3.py) also changed to give [output file](gnn_with_prob/3_add_directive_vector_in_graph/data_global_3.json) with edges matrix (E).
 
-### Result
+### Result <a name="result"></a>
 ...
 
-## Pulse shapes as member of input data (secondary approach)
+## Pulse shapes as member of input data (secondary approach) <a name="ps"></a>
 
 In directory [nn_with_ps](nn_with_ps) you can find set of codes which was created to extract batches of pulse shapes which occured at the same time range. Also with respect to every signals it counts number of interactions. Resulting data you can find in [json file](nn_with_ps/data.json).
 

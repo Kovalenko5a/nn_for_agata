@@ -38,7 +38,8 @@ def global_array():
             Global_array[1][num_of_training_units] = feature_array[1]
             Global_array[2][num_of_training_units] = lable_array
             num_of_training_units+=1
-            print(num_of_training_units)
+            if num_of_training_units%100 == 0:
+                print(num_of_training_units)
             buffer.close()
             b=True
             del buff_df
