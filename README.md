@@ -49,7 +49,7 @@ I want to notice that my code might to look a little unprofessional: that's not 
 All codes of this model you can find in [features_lable_data_format](features_lable_data_format) directory.
 Analytical model might be presented as:  
 <!-- $[{Edep, Crystal, Segment} \rangle \overset{f}\longrightarrow Num\_of\_interaction$   -->
-
+$[{Edep, Crystal, Segment} \rangle \overset{f}\longrightarrow Num\_of\_interaction$
 <img src="https://render.githubusercontent.com/render/math?math=[{Edep,Crystal,Segment}\rangle\overset{f}%20\longrightarrow%20Num\_of\_interaction">
 
 For instans of input data you can see [file](features_lable_data_format/out.csv) which was recived from [script](features_lable_data_format/out_creator.py) for raw data processing. This [file](features_lable_data_format/out.csv) we read into [pandas DataFrame](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html) in [main code](features_lable_data_format/functional_api_model.py).
